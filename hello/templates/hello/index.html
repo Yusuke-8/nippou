@@ -8,11 +8,14 @@
 </head>
 <body class="container">
     <h1 class="display-4 text-primary mb-4">{{title}}</h1>
-    <p class="h5">{{message|safe}}</p>
+    <p class="h5">{{result|safe}}</p>
     <form action="{% url 'index' %}" method="post">
         {% csrf_token %}
-        {{form.as_table}}
+        <table>
+        {{form.as_p}}
+        <tr><td></td></tr>
         <input type="submit" value="click" class="btn btn-primary my-2">
+        </table>
     </form>
 </body>
 </html>
