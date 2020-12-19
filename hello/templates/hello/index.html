@@ -8,7 +8,14 @@
 </head>
 <body class="container">
     <h1 class="display-4 text-primary mb-4">{{title}}</h1>
-    <p class="h5">{{msg}}</p>
+    <p class="h5">{{message|safe}}</p>
+    <form action="{% url 'index' %}" method="post">
+        {% csrf_token %}
+        {{form.as_table}}
+        <input type="submit" value="click">
+    </form>
+    <br>
+    <br>
     <p class="h6"><a href="{% url goto %}">{{goto}}</a></p>
 </body>
 </html>
