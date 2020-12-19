@@ -1,35 +1,22 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.views.generic import TemplateView
 from .form import HelloForm
 
-# Create your views here.
-def index(request):
-    params = {
-        'title': 'hello/Index',
-        'message': 'your data:',
-        'form': HelloForm(),
-        'goto': 'next'
-    }
-    if (request.method == 'POST'):
-        params['message'] = '名前:' + request.POST['name'] + \
-                            '<br>メール:' + request.POST['mail'] + \
-                            '<br>年齢:' + request.POST['age']
-        params['form'] = HelloForm(request.POST)
-    return render(request, 'hello/index.html', params)
+class HelloView(TemplateView):
+    def __init__(self):
+        self.params = {
+            'title': 'Hello',
+            'message': 'you datea:',
+            'form': HelloForm()
+            }
 
-def next(request):
-    params = {
-        'title': 'hello/Next',
-        'msg': 'This is sample page.',
-        'goto': 'index'
-    }
-    return render(request, 'hello/index.html', params)
+    def get(self, request):
+        return render(request, 'hello/index.html', self.params)
 
-def form(request):
-    msg = request.POST['msg']
-    params = {
-        'title': 'Hello/Form',
-        'msg': 'Hello '+ msg + '.' ,
-        'goto': 'index'
-    }
-    return render(request, 'hello/index.html', params)
+    def post(self, request):
+        msg = 'あなたは、<b>' + request.POST['name'] + '(' + request.POST['age'] + ')</b>さんです。'  + \
+              '<br>メールアドレスは<b>' + request.POST['mail'] + '</b>ですね。' 
+        self.params['message'] = msg
+        self.params['form'] = HelloForm(request.POST)
+        return render(request, 'hello/index.html', self.params)
