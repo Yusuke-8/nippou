@@ -8,14 +8,34 @@
 </head>
 <body class="container">
     <h1 class="display-4 text-primary mb-4">{{title}}</h1>
-    <p class="h5">{{result|safe}}</p>
-    <form action="{% url 'index' %}" method="post">
+    <p class="h5">{{message|safe}}</p>
+    <form action="{% url 'index' %}" method="POST">
         {% csrf_token %}
-        <table>
-        {{form.as_p}}
-        <tr><td></td></tr>
-        <input type="submit" value="click" class="btn btn-primary my-2">
-        </table>
+        {{form}}
+        <input type="submit" value="click">
     </form>
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>GENDER</th>
+            <th>MAIL</th>
+            <th>AGE</th>
+            <th>BIRTHDAY</th>
+        </tr>
+        {% for item in data %}
+            <tr>
+                <th>{{item.id}}</th>
+                <th>{{item.name}}</th>
+                <th>
+                    {% if item.gender == False %}male{% endif %}
+                    {% if item.gender == True %}female{% endif %}
+                </th>
+                <th>{{item.mail}}</th>
+                <th>{{item.age}}</th>
+                <th>{{item.birthday}}</th>
+            </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>
