@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+<body class="container">
+    <h1 class="display-4 text-primary mb-4"><a href="{% url 'index' %}">hello</a></h1>
+    <p>Friend Detail</p>
+    <table class='table'>
+        <tr> <th>ID</th><td>{{object.id}}</td></tr>
+        <tr><th>Name</th><td>{{object.name}}</td></tr>
+        <tr>
+            <th>Gender</th><td>            
+                {% if object.gender == False %}Male{% endif %}
+                {% if object.gender == True %}Female{% endif %}
+            </td>
+        </tr>
+        <tr><th>Email</th><td>{{object.mail}}</td></tr>
+        <tr><th>Age</th><td>{{object.age}}</td></tr>
+        <tr><th>Birth</th><td>{{object.birthday}}</td></tr>
+    </table>
+</body>
+</html>

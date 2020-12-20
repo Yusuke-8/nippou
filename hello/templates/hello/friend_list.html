@@ -7,18 +7,19 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 </head>
 <body class="container">
-    <h1 class="display-4 text-primary mb-4"><a href="{% url 'index' %}">{{title}}</a></h1>
-    <h3 class="h3"><a href="{% url 'create' %}">{{create}}</a></h3>
-    <p><a href="{% url 'find' %}">検索</a></p>
+    <h1 class="display-4 text-primary mb-4"><a href="{% url 'index' %}">hello</a></h1>
+    <h3 class="h3">Friend List</h3>
     <table class="table">
         <tr>
-            <th>data</th>
+            <th>id</th>
+            <th>name</th>
+            <th></th>
         </tr>
-        {% for item in data %}
+        {% for item in object_list %}
         <tr>
-            <td>{{item}}</td>
-            <td><a href="{% url 'edit' item.id %}">編集</a></td>
-            <td><a href="{% url 'delete' item.id %}">削除</a></td>
+            <td>{{item.id}}</td>
+            <td>{{item.name}}</td>
+            <td><a href="/hello/detail/{{item.id}}">detail</a></td>
         </tr>
         {% endfor %}
     </table>
