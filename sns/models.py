@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 class Message(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='messgae_owner')
-    grop = models.ForeignKey('Group', on_delete=models.CASCADE)
+    group = models.ForeignKey('Group', on_delete=models.CASCADE)
     content = models.TextField(max_length=100)
     share_id = models.IntegerField(default=-1)
     good_count = models.IntegerField(default=0)
@@ -24,7 +24,7 @@ class Group(models.Model):
     title = models.CharField(max_length=100)
 
     def __str__(self):
-        return '<' + self.title + '(' + self.owner + ')>' 
+        return '<' + self.title + '(' + str(self.owner) + ')>' 
 
 class Friend(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friend_owner')
