@@ -18,3 +18,31 @@ def index(request, page=1):
         for item in request.POST.getlist('groups'):
             glist.append(item)
         messages = get_your_group_message(request.user, glist, page)
+    else:
+        checkform = GroupCheckForm(request.user)
+        gps = Group.objects.filter(owner=request.user)
+        glist = [public_group.title]
+        for item in gps:
+            glist.append(item.title)
+        messages = get_your_group_message(request, user, glist, page)
+        params = {
+            'login_user':request.user,
+            'contents':messages,
+            'check_form':checkform
+        }
+
+    return render(request, 'sns/index.html', paramas)
+
+@login_required(login_url='/admin/login/')
+def groups(request):
+    friends = Friend.objects.filtter(owner=request.user)
+    if request.method == 'POST':
+        if request.POST['POST'] == '__groups_form__':
+            sel_group = request.POST['groups']
+            gp = Friend.objects.filter(title=set_group).first()
+            fds = Friend.objects.filter(owner=request.user).filter(group=gp)
+            print(Friend.objects.filter(owner=request.user))
+            vlist = []
+            for item in fds:
+                vlist.append(item.user.username)
+            groupsform = GroupSelectForm(request)
