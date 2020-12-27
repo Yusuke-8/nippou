@@ -107,3 +107,18 @@ def creategroups(request):
     messages.info(request, '新しいグループを作成しました。')
     return redirect(to='/sns/groups')
 
+@login_required(login_url='/admin/login')
+def post(request):
+    if request.method == 'POST':
+        gr_name = request.POST['groups']
+        content = request.POST['content']
+        group = Group.objects.filter(owner=request.user).filter(title=get_name).first()
+        if group == None:
+            (public_user, group) = get_public()
+            msg = Message()
+            msg.group = group
+            msg.content = content
+            msg.save()
+            messages.success(request, '新しいメッセージを投稿しまいした。')
+            return redirect(to='/sns')
+            
