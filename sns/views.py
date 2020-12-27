@@ -45,4 +45,5 @@ def groups(request):
             vlist = []
             for item in fds:
                 vlist.append(item.user.username)
-            groupsform = GroupSelectForm(request)
+            groupsform = GroupSelectForm(request, user, request.POST,)
+            friendsform = FriendForm(request.user, friendsform=friends, vals=vlist)
