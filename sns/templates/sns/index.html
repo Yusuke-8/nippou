@@ -1,0 +1,30 @@
+{% extends 'sns/layout.html' %}
+{% block title %}Index{% endblock %}
+{% block header %}
+<script>
+    function sendGroupForm(page){
+        document.group_form.action += page;
+        document.group_form.submit();
+    }
+</script>
+<h1 class="display-4 text-primary">SNS</h1>
+<p>※グループのチェックをONにしてupdateすると、そのグループに登録されている利用者のメッセージだけが表示されます。</p>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{message.tags}}" {{endif}}>{{message}}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}
+{% block content %}
+<hr>
+<div>
+    <form action="{% url 'index' %}" method="post" name="group_form">
+        {% csrf_token %}
+        {{check_form}}
+        <div>
+            <button class="btn btn-primary">update</button>
+        </div>
+    </form>
+</div>
