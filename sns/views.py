@@ -121,4 +121,10 @@ def post(request):
             msg.save()
             messages.success(request, '新しいメッセージを投稿しまいした。')
             return redirect(to='/sns')
-            
+        else:
+            form = PostForm(request.user)
+        paramas = {
+            'login_user': request.user,
+            'form': form,
+        }
+        return render(request, 'sns/post.html', paramas)
