@@ -128,3 +128,71 @@ def post(request):
             'form': form,
         }
         return render(request, 'sns/post.html', paramas)
+
+@login_required(login_url='/admin/login/')
+def share(request, share_id):
+    share = Message.objects.get(id=share_id)
+    print(share)
+    if request.method == 'POST':
+        gr_name = request.POST['groups']
+        content = request.POST['content']
+        group = Group.objects.filter(owner=request.user).filter(title=gr_name).first()
+        if group == None:
+            (public_user, group) = get_public()
+        msg = Message()
+        msg.owner = request.user
+        msg.group = group
+        msg.content = content
+        msg.share_id = share_id
+        msg.save()
+        share_msg = msg.get_share()
+        share_msg.share_count += 1
+        share_msg.save()
+        messages.success(request, 'メッセージをシェアしました！')
+        return redirect(to='/sns')
+
+    form = PostForm(request.user)
+    paramas = {
+        'login_user': request.user,
+        'form': form,
+        'share': share,
+    }
+    return render(request, 'sns/share.html', paramas)
+
+@login_required(login_url='/admin/login/')
+def good(request, good_id):
+    good_msg = Message.objects.get(id=good_id)
+    is_good = Good.objects.filter(owner=request.user).filter(message=good_msg).count()
+    if is_good > 0:
+        messages.success(request, '既にメッセージにはGoodしています。')
+        return redirect(to='/sns')
+
+    good_msg.good_count += 1
+    good_msg.save()
+    good = Good()
+    good.owner = request.user
+    good.message = good_msg
+    good.save()
+    messages.success(request, 'メッセージにGoodしました')
+    return redirect(to='/sns')
+
+def get_your_group_message(owner, list, page):
+    page_num = 10
+    (public_user, public_group) = get_list()
+    groups = Group.objects.filter(Q(owner=owner)|Q(owner=public_user)).filter(title__in=glist)
+    me_firends = Friend.objects.filter(group__in=groups)
+    me_users = []
+    for f in me_firends:
+        me_users.append(f.user)
+    his_groups = Group.objects.filter(owner__in=me_users)
+    his_friends = Friend.objects.filter(user=owner).filter(group__in=his_groups)
+    me_groups = []
+    for hf in his_friends:
+        me_groups.append(hf)
+    messages = Message.objects.filter(Q(group__in=groups))
+    return page_item.get_page(page)
+
+def get_public():
+    public_user = User.objects.filter(username='public').first()
+    public_group = Group.objects.filter(owner=public_user).first()
+    return (public_user, public_group)
